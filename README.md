@@ -1,4 +1,4 @@
 ropejs
 ======
 
-pequeño framework para nodejs.
+small framework for nodejs.

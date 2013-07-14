@@ -5,21 +5,31 @@ var views = require('./views'),
 exports = exports || {};
 (function(){
     var 
-    head = {'Content-Type':'text/html'};
-    this.controller = function(url,urls,views){
-        var reg;
+    head = {'Content-Type':'text/html'},
+    urlsR = (function(urls){
+        var regExp = urls.slice();
         for(var i in urls){
-            reg = new RegExp(urls[i][0]);
-            if(url.match(reg))
-                return urls[i][1];
+            regExp[i][0] = new RegExp(urls[i][0]);
+        }
+        return regExp;
+    })(urls.urls);
+    this.urlsR = function(urls){
+        for(var i in urls){
+            urls[i][0] = new RegExp(urls[i][0]);
+        }
+        return urls;
+    };//for test!
+    this.controller = function(url,urls,views){
+        urlsR = this.urlsR(urls);//for test UrlsR function autoejecutable
+        for(var i in urls){
+            if(url.match(urlsR[i][0]))
+                return views[urls[i][1]]?urls[i][1]:false;
         }
         return false;
     };
     
     this.onRequest = function(request,response){
-        //var url = url.parse(request.url).pathname;
         console.log('request to: '+ request.url);
-
         response.writeHead(200, {'Content-Type':'text/html'});
         response.write('algo0');
         response.end();

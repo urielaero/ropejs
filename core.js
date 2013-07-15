@@ -1,11 +1,11 @@
 var views = require('./views'),
-    urls  = require('./urls');
+    urls  = require('./urls'),
+    settings = require('./settings').settings;
 
 //core
 (function(){
     'use strict';
-    var 
-    head = {'Content-Type':'text/html'},
+    var self = this,
     urlsR = (function(urls){
         var length = urls.length;
         for(var i=0;i<length;i++){
@@ -13,14 +13,14 @@ var views = require('./views'),
         }
         return urls;
     })(urls.urls);
-    this.urlsR = function(urls){
+    self.urlsR = function(urls){
         for(var i in urls){
             urls[i][0] = new RegExp(urls[i][0]);
         }
         return urls;
     };//for test!
-    this.controller = function(url,urls,views){
-        urlsR = this.urlsR(urls);//for test UrlsR function autoejecutable
+    self.controller = function(url,urls,views){
+        urlsR = self.urlsR(urls);//for test UrlsR function autoejecutable
         var length = urls.length;
         for(var i=0;i<length;i++){
             if(url.match(urlsR[i][0])){
@@ -30,15 +30,22 @@ var views = require('./views'),
         return false;
     };
     
-    this.onRequest = function(request,response){
-        console.log('request to: '+ request.url);
-        response.writeHead(200, {'Content-Type':'text/html'});
-        response.write('algo0');
-        response.end();
+    self.onRequest = function(request,response){
+        if(settings.bugMode){
+            console.log('request to: '+ request.url);
+        }
+        var url = request.url,
+            controller = self.controller(url,urls,views);
+        if( typeof controller  === 'function'){
+            views[controller](request,response);
+        }
+        //response.writeHead(200, {'Content-Type':'text/html'});
+        //response.write('algo0');
+        //response.end();
 
     };
+
+    self.getPort = function(){
+        return settings.port;
+    };
 }).apply(exports);
-
-    
-//core.js  index.js  README.md  server.js  test  urls.js  views.js
-

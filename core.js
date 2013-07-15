@@ -1,5 +1,5 @@
 var views = require('./views'),
-    urls  = require('./urls'),
+    urls  = require('./urls').urls,
     settings = require('./settings').settings;
 
 //core
@@ -12,7 +12,7 @@ var views = require('./views'),
             urls[i][0] = new RegExp(urls[i][0]);
         }
         return urls;
-    })(urls.urls);
+    })(urls);
     self.urlsR = function(urls){
         for(var i in urls){
             urls[i][0] = new RegExp(urls[i][0]);
@@ -36,7 +36,11 @@ var views = require('./views'),
         }
         var url = request.url,
             controller = self.controller(url,urls,views);
-        if( typeof controller  === 'function'){
+        if(settings.bugMode){
+            console.log('request to: '+ request.url +' controller: '
+            +controller);
+        }
+        if( typeof views[controller]  === 'function'){
             views[controller](request,response);
         }
         //response.writeHead(200, {'Content-Type':'text/html'});

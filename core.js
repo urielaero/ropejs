@@ -20,8 +20,8 @@ var views = require('./views'),
         return urls;
     };//for test!
     self.controller = function(url,urls,views){
-        urlsR = self.urlsR(urls);//for test UrlsR function autoejecutable
-        var length = urls.length,
+        var urlsR = urlsR || self.urlsR(urls),//for test UrlsR function autoejecutable
+            length = urls.length,
             urlParams;
         for(var i=0;i<length;i++){
             if(urlParams = url.match(urlsR[i][0])){
@@ -36,7 +36,7 @@ var views = require('./views'),
     
     self.onRequest = function(request,response){
         //for test
-        urls = self.urls || urls;
+        urls = self.urls || urls,
         views = self.views || views;
 
         if(settings.bugMode){

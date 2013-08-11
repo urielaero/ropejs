@@ -4,7 +4,8 @@
     this.urls = [
             //[regExp,function,],
             ['^/$','index'],
-            ['^/other-url-more-charts$','other']
+            ['^/other-url-more-charts$','other'],
+            ['^/param/(\\w+)$','withParams']
 
         ];
 }).apply(exports);

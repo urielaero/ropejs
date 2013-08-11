@@ -20,17 +20,25 @@ var views = require('./views'),
         return urls;
     };//for test!
     self.controller = function(url,urls,views){
-        //urlsR = self.urlsR(urls);//for test UrlsR function autoejecutable
-        var length = urls.length;
+        urlsR = self.urlsR(urls);//for test UrlsR function autoejecutable
+        var length = urls.length,
+            urlParams;
         for(var i=0;i<length;i++){
-            if(url.match(urlsR[i][0])){
-                return views[urls[i][1]]?urls[i][1]:false;
+            if(urlParams = url.match(urlsR[i][0])){
+                if(views[urls[i][1]]){
+                    views.params = urlParams[1]?urlParams.slice(1):false;
+                    return urls[i][1]
+                }
             }
         }
         return false;
     };
     
     self.onRequest = function(request,response){
+        //for test
+        urls = self.urls || urls;
+        views = self.views || views;
+
         if(settings.bugMode){
             console.log('request to: '+ request.url);
         }
@@ -41,8 +49,9 @@ var views = require('./views'),
             +controller);
         }
         if( typeof views[controller]  === 'function'){
-            views[controller](request,response);
+            return views[controller](request,response);
         }
+        return false;
         //response.writeHead(200, {'Content-Type':'text/html'});
         //response.write('algo0');
         //response.end();

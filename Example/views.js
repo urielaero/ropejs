@@ -18,4 +18,11 @@ var mu = require('mu2') //template engine: mustache
         response.end();
     };
 
+    this.withParams = function(request,response){
+        response.writeHead(200, {'Content-Type':'text/html'});
+        response.write('withParams: '+ this.params );
+        response.end();
+        
+    };
+
 }).apply(exports);
